@@ -68,6 +68,9 @@ namespace ApiVentasLoteria.Data
 
                 dynamic responseContent = JsonConvert.DeserializeObject(respuesta.Content);
                 string numeroTicketsinHash = responseContent.SelectToken("gameTicketNumber");
+                if (numeroTicketsinHash==null || numeroTicketsinHash==string.Empty)
+                    throw new Exception("Error al general el ticket");
+
                 string numeroTicket = AddHash(numeroTicketsinHash);
 
                 responseContent.gameTicketNumber = numeroTicket;
@@ -135,6 +138,7 @@ namespace ApiVentasLoteria.Data
                 requerimiento.AddHeader("Content-Type", "application/json");
                 requerimiento.AddHeader("Accept", "application/json");
                 requerimiento.AddHeader("token", entradaDTO.token);
+                requerimiento.AddHeader("customerSessionId", entradaDTO.customerSessionId);
                 requerimiento.AddHeader("deviceId", entradaDTO.deviceId);
                 requerimiento.AddBody(jsonRequest);
                 var respuesta = await apiScientificGames.ExecuteAsync(requerimiento);

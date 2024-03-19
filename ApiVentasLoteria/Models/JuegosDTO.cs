@@ -161,6 +161,7 @@ namespace ApiVentasLoteria.Models
             /// ID de usuario que devuelve el inicio de sesión
             /// </summary>
             public int? userID { get; set; }
+            public string? customerSessionId { get; set; }
 
         }
         public class ConsultarTicketDTO
