@@ -370,8 +370,220 @@ namespace ApiVentasLoteria.Models
             /// </summary>
             public ResultadoDTO resultado { get; set; }
         }
+        public class RecargaBet593DTO
+        {
+            /// <summary>
+            /// Usuario definido para uso del servicio
+            /// </summary>
+            public string usuario { get; set; }
+            /// <summary>
+            /// Token o ID de seguridad que devuelve el inicio de sesión
+            /// </summary>
+            public string token { get; set; }
+            /// <summary>
+            /// Identificación abreviada del canal de venta: Está compuesto de tres letras mayúsculas
+            /// </summary>
+            public string canal { get; set; }
+            /// <summary>
+            /// Medio de venta definido para uso del servicio (valor constante). Otorgado por Lotería Nacional a la Cadena
+            /// </summary>
+            public int medioId { get; set; }
+            /// <summary>
+            /// Nombre del punto/local que hace la recarga (En caso de POS, se debe enviar el Id del punto de la suerte)
+            /// </summary>
+            public int puntooperacionid { get; set; }
+            /// <summary>
+            /// Número de Cédula del cliente al que se recarga un valor
+            /// </summary>
+            public string cuentaweb { get; set; }
+            /// <summary>
+            /// Número de recarga interna de Lotería Nacional, es el identificador único de la recarga realizada
+            /// </summary>
+            public string? recargaid { get; set; }
+            /// <summary>
+            /// Número de recarga externa, es el identificador correspondiente al proveedor externo de la página web de Lotería Nacional
+            /// </summary>
+            public string? serialnumber { get; set; }
+            /// <summary>
+            /// Valor de la recarga, con dos decimales (separador de decimales punto)
+            /// </summary>
+            public string? valor { get; set; }
+            /// <summary>
+            /// Número único de transacción
+            /// </summary>
+            public string? codigotrn { get; set; }
+            /// <summary>
+            /// Motivo del reverso
+            /// </summary>
+            public string? motivo { get; set; }
 
+        }
+        public class RespuestaRecargaBet593DTO
+        {
+            /// <summary>
+            /// Usuario definido para uso del servicio
+            /// </summary>
+            public string usuario { get; set; }
+            /// <summary>
+            /// Token o ID de seguridad que devuelve el inicio de sesión
+            /// </summary>
+            public string token { get; set; }
+            /// <summary>
+            /// RECARGA593, valor constante el cual identifica que se realizará una recarga online a la cuenta de un cliente
+            /// </summary>
+            public string operacion { get; set; }
+            /// <summary>
+            /// Si este campo es 0, indica que no hubo error en la ejecución, caso contrario devolverá el código de error que corresponda
+            /// </summary>
+            public int codError { get; set; }
+            /// <summary>
+            /// Contiene la descripción del error solo en caso de existir
+            /// </summary>
+            public string? msgError { get; set; }
+            /// <summary>
+            /// Si es 0, indica que se completó la transacción
+            /// </summary>
+            public string resultado { get; set; }
+            /// <summary>
+            /// Número de Cédula del cliente al que se le realiza la recarga
+            /// </summary>
+            public string cuentaweb { get; set; }
+            /// <summary>
+            /// Nombre del cliente
+            /// </summary>
+            public string? nombre { get; set; }
+            /// <summary>
+            /// Apellido del cliente
+            /// </summary>
+            public string? apellido { get; set; }
+            /// <summary>
+            /// Tipo de documento de identificación
+            /// </summary>
+            public string? tipoDocumento { get; set; }
+            /// <summary>
+            /// Valor de la recarga, con dos decimales (separador de decimales punto)
+            /// </summary>
+            public string? valor { get; set; }
+            /// <summary>
+            /// Fecha y hora de la recarga
+            /// </summary>
+            public DateTime? fecharecarga { get; set; }
+            /// <summary>
+            /// Número de recarga interna de Lotería Nacional, es el identificador único de la recarga realizada
+            /// </summary>
+            public string? recargaid { get; set; }
+            /// <summary>
+            /// Número de recarga externa, es el identificador correspondiente al proveedor externo de la página web de Lotería Naciona
+            /// </summary>
+            public string? serialnumber { get; set; }
+            /// <summary>
+            /// Indica el estado de la transacción RECARGADA, CONFIRMADA, ANULADA
+            /// </summary>
+            public string? estado { get; set; }
 
+        }
+        public class RetiroBet593DTO
+        {
+            /// <summary>
+            /// Usuario definido para uso del servicio
+            /// </summary>
+            public string usuario { get; set; }
+            /// <summary>
+            /// Numero Ip del equipo que se conecta al servicio
+            /// </summary>
+            public string maquina { get; set; }
+            /// <summary>
+            /// Si este campo es 0, indica que no hubo error en la ejecución, caso contrario devolverá el código de error que corresponda
+            /// </summary>
+            //public int codError { get; set; }
+            ///// <summary>
+            ///// Contiene la descripción del error solo en caso de existir
+            ///// </summary>
+            //public string? msgError { get; set; }
+            /// <summary>
+            /// RETIROOL, valor constante el cual identifica que se realizará una recarga online a la cuenta de un cliente
+            /// </summary>
+            public string operacion { get; set; }
+            /// <summary>
+            /// Token o ID de seguridad que devuelve el inicio de sesión
+            /// </summary>
+            public string token { get; set; }
+            /// <summary>
+            /// Usuario definido para uso del servicio (asociado al ClienteId). Usuario otorgado por Lotería Nacional a la Cadena
+            /// </summary>
+            public string UsuarioId { get; set; }
+            /// <summary>
+            /// Código de Cliente definido para uso del servicio (valor constante). Otorgado por Lotería Nacional a la Cadena
+            /// </summary>
+            public int ClienteId { get; set; }
+            /// <summary>
+            /// Medio de venta definido para uso del servicio (valor constante). Otorgado por Lotería Nacional a la Cadena
+            /// </summary>
+            public int MedioId { get; set; }
+            /// <summary>
+            ///Numero de transacción el cual debe ser único, sirve para identificar esta transacción de retiro. Generado por la Cadena
+            /// </summary>
+            public string NumeroTransaccion { get; set; }
+            /// <summary>
+            /// Número de identificación del usuario final que realizar el retiro (Cédula)
+            /// </summary>
+            public string Identificacion { get; set; }
+            /// <summary>
+            ///Número de retiro autorizado, el cual se verifica internamente para poder realizar el retiro. Numero otorgado por el Sitio Web al usuario final
+            /// </summary>
+            public string? NumeroRetiro { get; set; }
+            /// <summary>
+            ///Breve descripción del motivo del reverso
+            /// </summary>
+            public string? Motivo { get; set; }
 
+        }
+        public class RespuestaRetiroBet593DTO
+        {
+            /// <summary>
+            /// Si este campo es 0, indica que no hubo error en la ejecución, caso contrario devolverá el código de error que corresponda
+            /// </summary>
+            public int codError { get; set; }
+            /// <summary>
+            /// Contiene la descripción del error solo en caso de existir
+            /// </summary>
+            public string msgError { get; set; }
+            /// <summary>
+            /// Usuario definido para uso del servicio
+            /// </summary>
+            public string usuario { get; set; }
+            /// <summary>
+            /// RECARGA593, valor constante el cual identifica que se realizará una recarga online a la cuenta de un cliente
+            /// </summary>
+            public string operacion { get; set; }
+            /// <summary>
+            /// Token o ID de seguridad que devuelve el inicio de sesión
+            /// </summary>
+            public string token { get; set; }
+            /// <summary>
+            /// Número de recarga interna de Lotería Nacional, es el identificador único de la orden de pago del retiro realizado
+            /// </summary>
+            public int? ordenPagoId { get; set; }
+            /// <summary>
+            ///Número de cédula del cliente que realizó el retiro
+            /// </summary>
+            public string identificacion { get; set; }
+            /// <summary>
+            /// Valor o Monto que se retiró
+            /// </summary>
+            public string valor { get; set; }
+            /// <summary>
+            ///Número de trasnacción del retiro
+            /// </summary>
+            public string? numeroTransaccion { get; set; }
+            /// <summary>
+            ///Nombre de persona dueña de la Orden de Pago
+            /// </summary>
+            public string? nombre { get; set; }
+            /// <summary>
+            /// Fecha y hora del retiro
+            /// </summary>
+            public DateTime fecha { get; set; }
+        }
     }
 }

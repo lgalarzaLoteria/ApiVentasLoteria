@@ -389,7 +389,433 @@ namespace ApiVentasLoteria.Data
             }
         }
         #endregion
+        #region Bet593
+        public async Task<string> RecargarBet593(RecargaBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                        "<operacion>RECARGA593</operacion>" +
+                        "<canal>" + entradaDTO.canal + "</canal>" +
+                        "<medioid>" + entradaDTO.medioId.ToString() + "</medioid>" +
+                        "<puntooperacionid>" + entradaDTO.puntooperacionid.ToString() + "</puntooperacionid>" +
+                    "</c>" +
+                    "<i>" +
+                        "<cuentaweb>" + entradaDTO.cuentaweb + "</cuentaweb>" +
+                        "<valor>" + entradaDTO.valor.ToString() + "</valor>" +
+                        "<codigotrn>" + entradaDTO.codigotrn + "</codigotrn>" +
+                    "</i>" +
+                "</dat>"
+                );
 
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRecargaBet593DTO datoDevolver = new RespuestaRecargaBet593DTO();
+                datoDevolver.usuario = ((XElement)listaNodos[0]).Value;
+                datoDevolver.token = ((XElement)listaNodos[1]).Value;
+                datoDevolver.operacion = ((XElement)listaNodos[2]).Value;
+                datoDevolver.codError = int.Parse(((XElement)listaNodos[3]).Value);
+                datoDevolver.msgError = ((XElement)listaNodos[4]).Value;
+
+                var nodoO = xmlRespuesta.Descendants("o");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.resultado = ((XElement)listaNodosO[0]).Value;
+                datoDevolver.cuentaweb = ((XElement)listaNodosO[1]).Value;
+                datoDevolver.nombre = ((XElement)listaNodosO[2]).Value;
+                datoDevolver.apellido = ((XElement)listaNodosO[3]).Value;
+                datoDevolver.tipoDocumento = ((XElement)listaNodosO[4]).Value;
+                datoDevolver.valor = ((XElement)listaNodosO[5]).Value;
+                datoDevolver.fecharecarga = Convert.ToDateTime(((XElement)listaNodosO[6]).Value);
+                datoDevolver.recargaid = ((XElement)listaNodosO[7]).Value;
+                datoDevolver.serialnumber = ((XElement)listaNodosO[8]).Value;
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> ConfirmarBet593(RecargaBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                        "<operacion>CONFIRMA593</operacion>" +
+                        "<canal>" + entradaDTO.canal + "</canal>" +
+                        "<medioid>" + entradaDTO.medioId.ToString() + "</medioid>" +
+                        "<puntooperacionid>" + entradaDTO.puntooperacionid.ToString() + "</puntooperacionid>" +
+                    "</c>" +
+                    "<i>" +
+                        "<cuentaweb>" + entradaDTO.cuentaweb + "</cuentaweb>" +
+                        "<recargaid>" + entradaDTO.recargaid + "</recargaid>" +
+                        "<serialnumber>" + entradaDTO.serialnumber + "</serialnumber>" +
+                    "</i>" +
+                "</dat>"
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRecargaBet593DTO datoDevolver = new RespuestaRecargaBet593DTO();
+                datoDevolver.usuario = ((XElement)listaNodos[0]).Value;
+                datoDevolver.token = ((XElement)listaNodos[1]).Value;
+                datoDevolver.operacion = ((XElement)listaNodos[2]).Value;
+                datoDevolver.codError = int.Parse(((XElement)listaNodos[3]).Value);
+                datoDevolver.msgError = ((XElement)listaNodos[4]).Value;
+
+                var nodoO = xmlRespuesta.Descendants("o");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.resultado = ((XElement)listaNodosO[0]).Value;
+                datoDevolver.cuentaweb = ((XElement)listaNodosO[1]).Value;
+               
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> ValidarBet593(RecargaBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                        "<operacion>VALIDA593</operacion>" +
+                        "<canal>" + entradaDTO.canal + "</canal>" +
+                        "<medioid>" + entradaDTO.medioId.ToString() + "</medioid>" +
+                        "<puntooperacionid>" + entradaDTO.puntooperacionid.ToString() + "</puntooperacionid>" +
+                    "</c>" +
+                    "<i>" +
+                        "<cuentaweb>" + entradaDTO.cuentaweb + "</cuentaweb>" +
+                        "<recargaid>" + entradaDTO.recargaid + "</recargaid>" +
+                        "<serialnumber>" + entradaDTO.serialnumber + "</serialnumber>" +
+                    "</i>" +
+                "</dat>"
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRecargaBet593DTO datoDevolver = new RespuestaRecargaBet593DTO();
+                datoDevolver.usuario = ((XElement)listaNodos[0]).Value;
+                datoDevolver.token = ((XElement)listaNodos[1]).Value;
+                datoDevolver.operacion = ((XElement)listaNodos[2]).Value;
+                datoDevolver.codError = int.Parse(((XElement)listaNodos[3]).Value);
+                datoDevolver.msgError = ((XElement)listaNodos[4]).Value;
+
+                var nodoO = xmlRespuesta.Descendants("o");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.resultado = ((XElement)listaNodosO[0]).Value;
+                datoDevolver.cuentaweb = ((XElement)listaNodosO[1]).Value;
+                datoDevolver.estado = ((XElement)listaNodosO[2]).Value;
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> ReversarBet593(RecargaBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                        "<operacion>REVERSA593</operacion>" +
+                        "<canal>" + entradaDTO.canal + "</canal>" +
+                        "<medioid>" + entradaDTO.medioId.ToString() + "</medioid>" +
+                        "<puntooperacionid>" + entradaDTO.puntooperacionid.ToString() + "</puntooperacionid>" +
+                    "</c>" +
+                    "<i>" +
+                        "<cuentaweb>" + entradaDTO.cuentaweb + "</cuentaweb>" +
+                        "<recargaid>" + entradaDTO.recargaid + "</recargaid>" +
+                        "<serialnumber>" + entradaDTO.serialnumber + "</serialnumber>" +
+                        "<motivo>" + entradaDTO.motivo + "</motivo>" +
+                    "</i>" +
+                "</dat>"
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRecargaBet593DTO datoDevolver = new RespuestaRecargaBet593DTO();
+                datoDevolver.usuario = ((XElement)listaNodos[0]).Value;
+                datoDevolver.token = ((XElement)listaNodos[1]).Value;
+                if(listaNodos.Count==5)
+                {
+                    datoDevolver.operacion = ((XElement)listaNodos[2]).Value;
+                    datoDevolver.codError = int.Parse(((XElement)listaNodos[3]).Value);
+                    datoDevolver.msgError = ((XElement)listaNodos[4]).Value;
+                }
+                else
+                {
+                    datoDevolver.operacion = "REVERSA593";
+                    datoDevolver.codError = int.Parse(((XElement)listaNodos[2]).Value);
+                    datoDevolver.msgError = ((XElement)listaNodos[3]).Value;
+                }
+                var nodoO = xmlRespuesta.Descendants("o");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.resultado = ((XElement)listaNodosO[0]).Value;
+                datoDevolver.cuentaweb = ((XElement)listaNodosO[1]).Value;
+                
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> RetirarBet593(RetiroBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<maquina>" + entradaDTO.maquina + "</maquina>" +
+                        "<codError>0</codError>" +
+                        "<msgError />" +
+                        "<operacion>RETIROOL</operacion>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                    "</c>" +
+                    "<i>" +
+                        "<UsuarioId>" + entradaDTO.UsuarioId + "</UsuarioId>" +
+                        "<ClienteId>" + entradaDTO.ClienteId.ToString() + "</ClienteId>" +
+                        "<MedioId>" + entradaDTO.MedioId.ToString() + "</MedioId>" +
+                        "<NumeroTransaccion>" + entradaDTO.NumeroTransaccion + "</NumeroTransaccion>" +
+                        "<Identificacion>" + entradaDTO.Identificacion + "</Identificacion>" +
+                        "<NumeroRetiro>" + entradaDTO.NumeroRetiro + "</NumeroRetiro>" +
+                    "</i>" +
+                "</dat>"
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRetiroBet593DTO datoDevolver = new RespuestaRetiroBet593DTO();
+                datoDevolver.codError = int.Parse(((XElement)listaNodos[0]).Value);
+                datoDevolver.msgError = ((XElement)listaNodos[1]).Value;
+                datoDevolver.usuario = ((XElement)listaNodos[2]).Value;
+                if (listaNodos.Count == 5)
+                {
+                    datoDevolver.operacion = ((XElement)listaNodos[3]).Value;
+                    datoDevolver.token = ((XElement)listaNodos[4]).Value;
+                }
+                else
+                {
+                    datoDevolver.operacion = "RETIROOL";
+                    datoDevolver.token = ((XElement)listaNodos[3]).Value;
+                }
+                
+
+                var nodoO = xmlRespuesta.Descendants("R");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.ordenPagoId = Convert.ToInt32(((XElement)listaNodosO[0]).Value.ToString());
+                datoDevolver.identificacion = ((XElement)listaNodosO[1]).Value;
+                datoDevolver.valor = ((XElement)listaNodosO[2]).Value;
+                datoDevolver.numeroTransaccion = ((XElement)listaNodosO[3]).Value;
+                datoDevolver.fecha = Convert.ToDateTime(((XElement)listaNodosO[4]).Value.ToString());
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> ReversarRetiroBet593(RetiroBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<maquina>" + entradaDTO.maquina + "</maquina>" +
+                        "<codError>0</codError>" +
+                        "<msgError />" +
+                        "<operacion>RETIROOL</operacion>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                    "</c>" +
+                    "<i>" +
+                        "<UsuarioId>" + entradaDTO.UsuarioId + "</UsuarioId>" +
+                        "<ClienteId>" + entradaDTO.ClienteId.ToString() + "</ClienteId>" +
+                        "<MedioId>" + entradaDTO.MedioId.ToString() + "</MedioId>" +
+                        "<NumeroTransaccion>" + entradaDTO.NumeroTransaccion + "</NumeroTransaccion>" +
+                        "<Identificacion>" + entradaDTO.Identificacion + "</Identificacion>" +
+                        "<Motivo>" + entradaDTO.Motivo + "</Motivo>" +
+                    "</i>" +
+                "</dat>"
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRetiroBet593DTO datoDevolver = new RespuestaRetiroBet593DTO();
+                datoDevolver.codError = int.Parse(((XElement)listaNodos[0]).Value);
+                datoDevolver.msgError = ((XElement)listaNodos[1]).Value;
+                datoDevolver.usuario = ((XElement)listaNodos[2]).Value;
+                if (listaNodos.Count == 5)
+                {
+                    datoDevolver.operacion = ((XElement)listaNodos[3]).Value;
+                    datoDevolver.token = ((XElement)listaNodos[4]).Value;
+                }
+                else
+                {
+                    datoDevolver.operacion = "RETIREVERSOOL";
+                    datoDevolver.token = ((XElement)listaNodos[3]).Value;
+                }
+
+
+                var nodoO = xmlRespuesta.Descendants("R");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.ordenPagoId = Convert.ToInt32(((XElement)listaNodosO[0]).Value.ToString());
+                datoDevolver.identificacion = ((XElement)listaNodosO[1]).Value;
+                datoDevolver.valor = ((XElement)listaNodosO[2]).Value;
+                datoDevolver.numeroTransaccion = ((XElement)listaNodosO[3]).Value;
+                datoDevolver.fecha = Convert.ToDateTime(((XElement)listaNodosO[4]).Value.ToString());
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> ConsultarRetiroBet593(RetiroBet593DTO entradaDTO)
+        {
+            try
+            {
+                XDocument documentoTransaccionXML = new XDocument();
+                //Se arma la data para generar y enviar el XML
+                documentoTransaccionXML = XDocument.Parse("" +
+                "<dat>" +
+                    "<c>" +
+                        "<usuario>" + entradaDTO.usuario + "</usuario>" +
+                        "<maquina>" + entradaDTO.maquina + "</maquina>" +
+                        "<codError>0</codError>" +
+                        "<msgError />" +
+                        "<operacion>CONRETIROOL</operacion>" +
+                        "<token>" + entradaDTO.token + "</token>" +
+                    "</c>" +
+                    "<i>" +
+                        "<UsuarioId>" + entradaDTO.UsuarioId + "</UsuarioId>" +
+                        "<ClienteId>" + entradaDTO.ClienteId.ToString() + "</ClienteId>" +
+                        "<MedioId>" + entradaDTO.MedioId.ToString() + "</MedioId>" +
+                        "<NumeroTransaccion>" + entradaDTO.NumeroTransaccion + "</NumeroTransaccion>" +
+                        "<Identificacion>" + entradaDTO.Identificacion + "</Identificacion>" +
+                        "<NumeroRetiro>" + entradaDTO.NumeroRetiro + "</NumeroRetiro>" +
+                    "</i>" +
+                "</dat>"
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnEjecutaTransaccionALTAsync(documentoTransaccionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                RespuestaRetiroBet593DTO datoDevolver = new RespuestaRetiroBet593DTO();
+                datoDevolver.codError = int.Parse(((XElement)listaNodos[0]).Value);
+                datoDevolver.msgError = ((XElement)listaNodos[1]).Value;
+                datoDevolver.usuario = ((XElement)listaNodos[2]).Value;
+                if (listaNodos.Count == 5)
+                {
+                    datoDevolver.operacion = ((XElement)listaNodos[3]).Value;
+                    datoDevolver.token = ((XElement)listaNodos[4]).Value;
+                }
+                else
+                {
+                    datoDevolver.operacion = "CONRETIROOL";
+                    datoDevolver.token = ((XElement)listaNodos[3]).Value;
+                }
+
+
+                var nodoO = xmlRespuesta.Descendants("R");
+                var listaNodosO = nodoO.Nodes().ToList();
+                datoDevolver.identificacion = ((XElement)listaNodosO[0]).Value;
+                datoDevolver.valor = ((XElement)listaNodosO[1]).Value;
+                datoDevolver.nombre = ((XElement)listaNodosO[2]).Value;
+                datoDevolver.fecha = Convert.ToDateTime(((XElement)listaNodosO[3]).Value.ToString());
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        #endregion
         #region Métodos y Funciones Privadas
         string AddHash(string ticketNumber)
         {

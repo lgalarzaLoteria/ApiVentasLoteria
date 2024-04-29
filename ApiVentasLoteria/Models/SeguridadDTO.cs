@@ -62,5 +62,13 @@
             public string token { get; set; }
 
         }
+        public class LoginBet593RespuestaDTO
+        {
+            public string usuario { get; set; }
+            public string token { get; set; }
+            public int codError { get; set; }
+            public string? msgError { get; set; }
+
+        }
     }
 }

@@ -206,6 +206,45 @@ namespace ApiVentasLoteria.Data
                 throw new Exception(ex.Message.ToString());
             }
         }
+        public async Task<string> LoginBet593(LoginDTO usuario)
+        {
+            try
+            {
+                //Se arma la data para generar y enviar el XML
+                XDocument documentoAutenticacionXML = XDocument.Parse("" +
+                    "<dat>" +
+                        "<medio>" + _tradicionales.GetValue<string>("medio") + "</medio>" +
+                        "<clienteId>" + _tradicionales.GetValue<string>("clienteId") + "</clienteId>" +
+                        "<usuario>" + usuario.UserName + "</usuario>" +
+                        "<clave>" + usuario.Password + "</clave>" +
+                        "<maquina>0.0.0.0</maquina>" +
+                    "</dat>" 
+                );
+
+                servicioBet593.ServicioClient servicio593 = new servicioBet593.ServicioClient();
+                var strRespuesta = await servicio593.fnAutenticacionALTAsync(documentoAutenticacionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("dat");
+                var listaNodos = nodo.Nodes().ToList();
+
+                LoginBet593RespuestaDTO datoDevolver = new LoginBet593RespuestaDTO();
+                datoDevolver.usuario = usuario.UserName;
+                datoDevolver.codError = int.Parse(((System.Xml.Linq.XElement)listaNodos[0]).Value);
+                datoDevolver.msgError = ((System.Xml.Linq.XElement)listaNodos[1]).Value;
+                datoDevolver.token = string.Empty;
+                if (listaNodos.Count == 4)
+                    datoDevolver.token = ((System.Xml.Linq.XElement)listaNodos[2]).Value;
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
 
         #region Métodos Privados
         public static string Encryptar(string clave)

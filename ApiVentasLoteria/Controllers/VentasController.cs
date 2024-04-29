@@ -52,6 +52,11 @@ namespace ApiVentasLoteria.Controllers
                         respuesta = await _seguridad.LoginTradicionales(entradaDTO);
                     }
                     break;
+                case "Bet593":
+                    {
+                        respuesta = await _seguridad.LoginBet593(entradaDTO);
+                    }
+                    break;
             }
             return Ok(respuesta);
         }
@@ -112,9 +117,13 @@ namespace ApiVentasLoteria.Controllers
             switch (entradaDTO.productoVender)
             {
                 case "Pega3":
-                case "Pega4":
                     {
                         respuesta = await _juegos.CrearTicketPega3(entradaDTO);
+                    }
+                    break;
+                case "Pega4":
+                    {
+                        //respuesta = await _juegos.CrearTicketPega3(entradaDTO);
                     }
                     break;
             }
@@ -212,6 +221,75 @@ namespace ApiVentasLoteria.Controllers
             }
             return Ok(respuesta);
         }
-
+        /// <summary>
+        /// Recarga electrónica de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("RecargarBet593")]
+        public async Task<ActionResult> RecargarBet593(RecargaBet593DTO entradaDTO)
+        {
+           return Ok(await _juegos.RecargarBet593(entradaDTO));
+        }
+        /// <summary>
+        /// Confirma recarga electrónica de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ConfirmarBet593")]
+        public async Task<ActionResult> ConfirmarBet593(RecargaBet593DTO entradaDTO)
+        {
+            return Ok(await _juegos.ConfirmarBet593(entradaDTO));
+        }
+        /// <summary>
+        /// Valida recarga electrónica de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ValidarBet593")]
+        public async Task<ActionResult> ValidarBet593(RecargaBet593DTO entradaDTO)
+        {
+            return Ok(await _juegos.ValidarBet593(entradaDTO));
+        }
+        /// <summary>
+        /// Revesa recarga electrónica de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ReversarBet593")]
+        public async Task<ActionResult> ReversarBet593(RecargaBet593DTO entradaDTO)
+        {
+            return Ok(await _juegos.ReversarBet593(entradaDTO));
+        }
+        /// <summary>
+        /// Retiro de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("RetirarBet593")]
+        public async Task<ActionResult> RetirarBet593(RetiroBet593DTO entradaDTO)
+        {
+            return Ok(await _juegos.RetirarBet593(entradaDTO));
+        }
+        /// <summary>
+        /// Reverso de retiro de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ReversarRetiroBet593")]
+        public async Task<ActionResult> ReversarRetiroBet593(RetiroBet593DTO entradaDTO)
+        {
+            return Ok(await _juegos.ReversarRetiroBet593(entradaDTO));
+        }
+        /// <summary>
+        /// Consulta retiro de Bet593
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ConsultarRetiroBet593")]
+        public async Task<ActionResult> ConsultarRetiroBet593(RetiroBet593DTO entradaDTO)
+        {
+            return Ok(await _juegos.ConsultarRetiroBet593(entradaDTO));
+        }
     }
 }
