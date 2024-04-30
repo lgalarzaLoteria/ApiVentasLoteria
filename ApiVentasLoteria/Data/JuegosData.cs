@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Text;
 using System.IO.Hashing;
+using NuGet.Protocol;
 
 
 namespace ApiVentasLoteria.Data
@@ -565,7 +566,7 @@ namespace ApiVentasLoteria.Data
                     "<c>" +
                         "<usuario>" + entradaDTO.usuario + "</usuario>" +
                         "<token>" + entradaDTO.token + "</token>" +
-                        "<operacion>REVERSA593</operacion>" +
+                        "<operacion>REVRETIROOL</operacion>" +
                         "<canal>" + entradaDTO.canal + "</canal>" +
                         "<medioid>" + entradaDTO.medioId.ToString() + "</medioid>" +
                         "<puntooperacionid>" + entradaDTO.puntooperacionid.ToString() + "</puntooperacionid>" +
@@ -597,7 +598,7 @@ namespace ApiVentasLoteria.Data
                 }
                 else
                 {
-                    datoDevolver.operacion = "REVERSA593";
+                    datoDevolver.operacion = "REVRETIROOL";
                     datoDevolver.codError = int.Parse(((XElement)listaNodos[2]).Value);
                     datoDevolver.msgError = ((XElement)listaNodos[3]).Value;
                 }
@@ -665,13 +666,21 @@ namespace ApiVentasLoteria.Data
                 }
                 
 
-                var nodoO = xmlRespuesta.Descendants("R");
-                var listaNodosO = nodoO.Nodes().ToList();
-                datoDevolver.ordenPagoId = Convert.ToInt32(((XElement)listaNodosO[0]).Value.ToString());
-                datoDevolver.identificacion = ((XElement)listaNodosO[1]).Value;
-                datoDevolver.valor = ((XElement)listaNodosO[2]).Value;
-                datoDevolver.numeroTransaccion = ((XElement)listaNodosO[3]).Value;
-                datoDevolver.fecha = Convert.ToDateTime(((XElement)listaNodosO[4]).Value.ToString());
+                var nodoO = xmlRespuesta.Descendants("xmlRetiroOutput");
+                var listaNodosO = nodoO.ElementAt(0).Value;
+                XDocument doc = XDocument.Parse(listaNodosO);
+                var nodoR = doc.Descendants("R");
+                var listaNodosR = nodoR.ToList();
+                if (listaNodosR.Count() > 0)
+                {
+                    datoDevolver.ordenPagoId = Convert.ToInt32(listaNodosR[0].Attribute("OrdPagId").Value.ToString());
+                    datoDevolver.identificacion = listaNodosR[0].Attribute("Ident").Value;
+                    datoDevolver.valor = listaNodosR[0].Attribute("Valor").Value;
+                    datoDevolver.numeroTransaccion = listaNodosR[0].Attribute("NuTrans").Value;
+                    datoDevolver.fecha = Convert.ToDateTime(listaNodosR[0].Attribute("FPago").Value.ToString());
+
+
+                }
 
                 var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
 
@@ -695,7 +704,7 @@ namespace ApiVentasLoteria.Data
                         "<maquina>" + entradaDTO.maquina + "</maquina>" +
                         "<codError>0</codError>" +
                         "<msgError />" +
-                        "<operacion>RETIROOL</operacion>" +
+                        "<operacion>REVRETIROOL</operacion>" +
                         "<token>" + entradaDTO.token + "</token>" +
                     "</c>" +
                     "<i>" +
@@ -731,14 +740,19 @@ namespace ApiVentasLoteria.Data
                     datoDevolver.token = ((XElement)listaNodos[3]).Value;
                 }
 
-
-                var nodoO = xmlRespuesta.Descendants("R");
-                var listaNodosO = nodoO.Nodes().ToList();
-                datoDevolver.ordenPagoId = Convert.ToInt32(((XElement)listaNodosO[0]).Value.ToString());
-                datoDevolver.identificacion = ((XElement)listaNodosO[1]).Value;
-                datoDevolver.valor = ((XElement)listaNodosO[2]).Value;
-                datoDevolver.numeroTransaccion = ((XElement)listaNodosO[3]).Value;
-                datoDevolver.fecha = Convert.ToDateTime(((XElement)listaNodosO[4]).Value.ToString());
+                var nodoO = xmlRespuesta.Descendants("xmlRetiroOutput");
+                var listaNodosO = nodoO.ElementAt(0).Value;
+                XDocument doc = XDocument.Parse(listaNodosO);
+                var nodoR = doc.Descendants("R");
+                var listaNodosR = nodoR.ToList();
+                if (listaNodosR.Count() > 0)
+                {
+                    datoDevolver.ordenPagoId = Convert.ToInt32(listaNodosR[0].Attribute("OrdPagId").Value.ToString());
+                    datoDevolver.identificacion = listaNodosR[0].Attribute("Ident").Value;
+                    datoDevolver.valor = listaNodosR[0].Attribute("Valor").Value;
+                    datoDevolver.numeroTransaccion = listaNodosR[0].Attribute("NuTrans").Value;
+                    datoDevolver.fecha = Convert.ToDateTime(listaNodosR[0].Attribute("FReverso").Value.ToString());
+                }
 
                 var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
 
@@ -799,12 +813,18 @@ namespace ApiVentasLoteria.Data
                 }
 
 
-                var nodoO = xmlRespuesta.Descendants("R");
-                var listaNodosO = nodoO.Nodes().ToList();
-                datoDevolver.identificacion = ((XElement)listaNodosO[0]).Value;
-                datoDevolver.valor = ((XElement)listaNodosO[1]).Value;
-                datoDevolver.nombre = ((XElement)listaNodosO[2]).Value;
-                datoDevolver.fecha = Convert.ToDateTime(((XElement)listaNodosO[3]).Value.ToString());
+                var nodoO = xmlRespuesta.Descendants("xmlRetiroOutput");
+                var listaNodosO = nodoO.ElementAt(0).Value;
+                XDocument doc = XDocument.Parse(listaNodosO);
+                var nodoR = doc.Descendants("R");
+                var listaNodosR = nodoR.ToList();
+                if (listaNodosR.Count() > 0)
+                {
+                    datoDevolver.identificacion = listaNodosR[0].Attribute("Ident").Value;
+                    datoDevolver.valor = listaNodosR[0].Attribute("Valor").Value;
+                    datoDevolver.nombre = listaNodosR[0].Attribute("Nombre").Value;
+                    datoDevolver.fecha = Convert.ToDateTime(listaNodosR[0].Attribute("FOrdenPago").Value.ToString());
+                }
 
                 var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
 
