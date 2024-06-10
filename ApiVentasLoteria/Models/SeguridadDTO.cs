@@ -16,6 +16,10 @@
             /// </summary>
             public string? Password { get; set; }
             /// <summary>
+            /// Nueva Clave del comercio para acceder al sistema (No debe ser encriptada) para cambio de clave
+            /// </summary>
+            public string? NewPassword { get; set; }
+            /// <summary>
             /// Id del dispositvo asignado al comercio
             /// </summary>
             public string? DeviceId { get; set; }
@@ -60,6 +64,8 @@
             public int codError { get; set; }
             public string? msgError { get; set; }
             public string token { get; set; }
+            public string? usuario { get; set; }
+            public string? operacion { get; set; }
 
         }
         public class LoginBet593RespuestaDTO
@@ -70,5 +76,6 @@
             public string? msgError { get; set; }
 
         }
+        
     }
 }

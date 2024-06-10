@@ -130,7 +130,7 @@ namespace servicioMTPrep
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IServicioMT))
             {
-                return new System.ServiceModel.EndpointAddress("http://200.24.198.70/WCFMT/ServicioMT.svc");
+                return new System.ServiceModel.EndpointAddress("http://200.24.198.70/WCFMT_PREP/ServicioMT.svc");
             }
             throw new System.InvalidOperationException(string.Format("No se pudo encontrar un punto de conexión con el nombre \"{0}\".", endpointConfiguration));
         }

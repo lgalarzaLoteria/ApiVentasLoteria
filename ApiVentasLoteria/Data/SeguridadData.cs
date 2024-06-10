@@ -27,6 +27,8 @@ namespace ApiVentasLoteria.Data
             _urlLogin = configuration.GetSection("ScientificGames");
             _tradicionales = configuration.GetSection("Tradicionales");
         }
+
+        #region Pega SG
         public async Task<string> LoginPega3(LoginDTO usuario)
         {
             try 
@@ -89,6 +91,8 @@ namespace ApiVentasLoteria.Data
 
 
         }
+        #endregion
+        #region Raspaditas SG
         public async Task<string> LoginRaspaditas(LoginDTO usuario)
         {
             try
@@ -152,6 +156,8 @@ namespace ApiVentasLoteria.Data
 
 
         }
+        #endregion
+        #region Tradicionales
         public async Task<string> LoginTradicionales(LoginDTO usuario)
         {
             try
@@ -176,17 +182,6 @@ namespace ApiVentasLoteria.Data
                 var strRespuesta = await servicioMT.fnAutenticacionAsync(documentoAutenticacionXML.ToString());
                 XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
                 
-                //Para prueba en caso de que se caiga el servicio de MT
-                //XDocument xmlRespuesta1 = XDocument.Parse("" +
-                //"<mt>" +
-                //    "<c>" +
-                //        "<codError>0</codError>" +
-                //        "<msgError />" +
-                //        "<token>31333124032012210903313331240321</token>" +
-                //    "</c>" +
-                //"</mt>"
-                //);
-
                 var nodo = xmlRespuesta.Descendants("c");
                 var listaNodos = nodo.Nodes().ToList();
 
@@ -206,6 +201,58 @@ namespace ApiVentasLoteria.Data
                 throw new Exception(ex.Message.ToString());
             }
         }
+        public async Task<string> CambiarClaveTradicionales(LoginDTO usuario)
+        {
+            try
+            {
+                //Se arma la data para generar y enviar el XML
+                XDocument documentoAutenticacionXML = XDocument.Parse("" +
+                "<mt>" +
+                    "<c>" +
+                        "<aplicacion>" + _tradicionales.GetValue<string>("aplicacion") + "</aplicacion>" +
+                        "<usuario>" + usuario.UserName + "</usuario>" +
+                        "<clave>" + usuario.Password + "</clave>" +
+                        "<claveNueva>" + usuario.Password + "</claveNueva>" +
+                        "<valida>S</valida>" +
+                        "<maquina>0.0.0.0</maquina>" +
+                        "<codError>0</codError>" +
+                        "<msgError />" +
+                        "<medio>" + _tradicionales.GetValue<string>("medio") + "</medio>" +
+                        "<operacion>" + _tradicionales.GetValue<string>("operacion") + "</operacion>" +
+                    "</c>" +
+                "</mt>"
+                );
+
+                servicioMTPrep.ServicioMTClient servicioMT = new servicioMTPrep.ServicioMTClient();
+                var strRespuesta = await servicioMT.fnAutenticacionAsync(documentoAutenticacionXML.ToString());
+                XDocument xmlRespuesta = XDocument.Parse(strRespuesta);
+
+                var nodo = xmlRespuesta.Descendants("c");
+                var listaNodos = nodo.Nodes().ToList();
+
+                LoginTradicionalRespuestaDTO datoDevolver = new LoginTradicionalRespuestaDTO();
+                datoDevolver.codError = int.Parse(((System.Xml.Linq.XElement)listaNodos[0]).Value);
+                datoDevolver.msgError = ((System.Xml.Linq.XElement)listaNodos[1]).Value;
+                datoDevolver.token = string.Empty;
+                if (listaNodos.Count == 4)
+                {
+                    datoDevolver.usuario = ((System.Xml.Linq.XElement)listaNodos[2]).Value;
+                    datoDevolver.operacion = ((System.Xml.Linq.XElement)listaNodos[3]).Value;
+                }
+                    
+
+                var jsonRespuesta = System.Text.Json.JsonSerializer.Serialize(datoDevolver);
+
+                return jsonRespuesta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        
+        #endregion
+        #region Bet593
         public async Task<string> LoginBet593(LoginDTO usuario)
         {
             try
@@ -245,6 +292,8 @@ namespace ApiVentasLoteria.Data
                 throw new Exception(ex.Message.ToString());
             }
         }
+        #endregion
+
 
         #region Métodos Privados
         public static string Encryptar(string clave)
