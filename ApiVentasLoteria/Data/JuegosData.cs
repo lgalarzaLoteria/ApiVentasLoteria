@@ -52,6 +52,7 @@ namespace ApiVentasLoteria.Data
         }
         public async Task<string> CrearTicketPega(CrearTicketPega3RequerimientoDTO entradaDTO)
         {
+            string respuestaJson = string.Empty;
             try
             {
                 var jsonRequest = System.Text.Json.JsonSerializer.Serialize(entradaDTO);
@@ -67,17 +68,38 @@ namespace ApiVentasLoteria.Data
                 requerimiento.AddBody(jsonRequest);
 
                 var respuesta = await apiScientificGames.ExecuteAsync(requerimiento);
-                //return respuesta.Content;
+                
+                if(respuesta.ResponseStatus==ResponseStatus.Error)
+                {
+                    dynamic responseContent = JsonConvert.DeserializeObject(respuesta.Content);
+                    respuestaJson = JsonConvert.SerializeObject(responseContent);
+                }
+                else
+                {
+                    if(respuesta.ResponseStatus==ResponseStatus.Completed)
+                    {
+                        dynamic responseContent = JsonConvert.DeserializeObject(respuesta.Content);
+                        string numeroTicketsinHash = responseContent.SelectToken("gameTicketNumber");
+                        if (numeroTicketsinHash == null || numeroTicketsinHash == string.Empty)
+                            throw new Exception("Error al general el ticket");
 
-                dynamic responseContent = JsonConvert.DeserializeObject(respuesta.Content);
-                string numeroTicketsinHash = responseContent.SelectToken("gameTicketNumber");
-                if (numeroTicketsinHash==null || numeroTicketsinHash==string.Empty)
-                    throw new Exception("Error al general el ticket");
+                        string numeroTicket = AddHash(numeroTicketsinHash);
 
-                string numeroTicket = AddHash(numeroTicketsinHash);
+                        responseContent.gameTicketNumber = numeroTicket;
+                        respuestaJson = JsonConvert.SerializeObject(responseContent);
 
-                responseContent.gameTicketNumber = numeroTicket;
-                var respuestaJson = JsonConvert.SerializeObject(responseContent);
+                    }
+                }
+
+                //dynamic responseContent = JsonConvert.DeserializeObject(respuesta.Content);
+                //string numeroTicketsinHash = responseContent.SelectToken("gameTicketNumber");
+                //if (numeroTicketsinHash==null || numeroTicketsinHash==string.Empty)
+                //    throw new Exception("Error al general el ticket");
+
+                //string numeroTicket = AddHash(numeroTicketsinHash);
+
+                //responseContent.gameTicketNumber = numeroTicket;
+                //var respuestaJson = JsonConvert.SerializeObject(responseContent);
 
                 return respuestaJson;
             }
@@ -153,11 +175,46 @@ namespace ApiVentasLoteria.Data
                 throw new Exception(ex.Message.ToString());
             }
         }
-       
+        public async Task<string> ObtieneUltimosSorteosxJuego(LoginDTO entradaDTO, string codigoJuego)
+        {
+            try
+            {
+                string urlMetodo = string.Concat(_urlJuegos.GetValue<string>("urlOpcionesPega3"),codigoJuego, "/draws/latest");
+                var apiScientificGames = new RestClient(urlMetodo);
+                var requerimiento = new RestRequest();
+                requerimiento.Method = Method.Get;
+                requerimiento.AddHeader("Content-Type", "application/json");
+                requerimiento.AddHeader("Accept", "application/json");
+                requerimiento.AddHeader("token", entradaDTO.token);
+                var respuesta = await apiScientificGames.ExecuteAsync(requerimiento);
+                return respuesta.Content;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+        public async Task<string> ObtieneSorteosActivoxJuego(LoginDTO entradaDTO, string codigoJuego)
+        {
+            try
+            {
+                string urlMetodo = string.Concat(_urlJuegos.GetValue<string>("urlOpcionesPega3"), codigoJuego, "/draws/active");
+                var apiScientificGames = new RestClient(urlMetodo);
+                var requerimiento = new RestRequest();
+                requerimiento.Method = Method.Get;
+                requerimiento.AddHeader("Content-Type", "application/json");
+                requerimiento.AddHeader("Accept", "application/json");
+                requerimiento.AddHeader("token", entradaDTO.token);
+                var respuesta = await apiScientificGames.ExecuteAsync(requerimiento);
+                return respuesta.Content;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+
         #endregion
-        
-
-
         #region Raspaditas
         public async Task<string> ConsultarTicketRaspaditas(ConsultarTicketDTO entradaDTO)
         {

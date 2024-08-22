@@ -36,11 +36,8 @@ namespace ApiVentasLoteria.Controllers
             string respuesta = string.Empty;
             switch (entradaDTO.productoVender)
             {
+                case "Pega2":
                 case "Pega3":
-                    {
-                        respuesta = await _seguridad.LoginPega3(entradaDTO);
-                    }
-                    break;
                 case "Pega4":
                     {
                         respuesta = await _seguridad.LoginPega3(entradaDTO);
@@ -175,6 +172,7 @@ namespace ApiVentasLoteria.Controllers
             string respuesta = string.Empty;
             switch (entradaDTO.productoVender)
             {
+                case "Pega2":
                 case "Pega3":
                 case "Pega4":
                     {
@@ -257,6 +255,68 @@ namespace ApiVentasLoteria.Controllers
             //        }
             //        break;
             //}
+            return Ok(respuesta);
+        }
+        /// <summary>
+        /// Recupera el último sorteos del juego el status siempre es Open
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ObtieneUltimosSorteosxJuego")]
+        public async Task<ActionResult> ObtieneUltimosSorteosxJuego(LoginDTO entradaDTO)
+        {
+            string respuesta = string.Empty;
+            string codigoJuego = string.Empty;
+            switch (entradaDTO.productoVender)
+            {
+                case "Pega2":
+                    {
+                        codigoJuego = "1003";
+                    }
+                    break;
+                case "Pega3":
+                    {
+                        codigoJuego = "1001";
+                    }
+                    break;
+                case "Pega4":
+                    {
+                        codigoJuego = "1002";
+                    }
+                    break;
+            }
+            respuesta = await _juegos.ObtieneUltimosSorteosxJuego(entradaDTO, codigoJuego);
+            return Ok(respuesta);
+        }
+        /// <summary>
+        /// Obtiene el sorteo activo del juego el estado es SaleOpen
+        /// </summary>
+        /// <param name="entradaDTO"></param>
+        /// <returns></returns>
+        [HttpPost("ObtieneSorteosActivoxJuego")]
+        public async Task<ActionResult> ObtieneSorteosActivoxJuego(LoginDTO entradaDTO)
+        {
+            string respuesta = string.Empty;
+            string codigoJuego = string.Empty;
+            switch (entradaDTO.productoVender)
+            {
+                case "Pega2":
+                    {
+                        codigoJuego = "1003";
+                    }
+                    break;
+                case "Pega3":
+                    {
+                        codigoJuego = "1001";
+                    }
+                    break;
+                case "Pega4":
+                    {
+                        codigoJuego = "1002";
+                    }
+                    break;
+            }
+            respuesta = await _juegos.ObtieneSorteosActivoxJuego(entradaDTO, codigoJuego);
             return Ok(respuesta);
         }
         /// <summary>
